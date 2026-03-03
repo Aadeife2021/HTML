@@ -1,0 +1,25 @@
+/*
+selector {
+  property: value;
+} 
+*/
+
+/* ID Selectors  */
+
+/* Class Selectors */
+
+/* Element Selectors */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  /* font-style: italic;
+  font-weight: bold;
+  font-size: 90%;
+  font-family: sans-serif; */
+
+  font: italic bold 90% sans-serif;
+}
+
+h2{
+  color: orange;
+}
