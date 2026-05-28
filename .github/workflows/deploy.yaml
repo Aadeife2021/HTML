@@ -9,7 +9,7 @@ jobs:
 
 
           # Clone your private repo using a personal access token
-          git clone 'https://${{ secrets.PAT }}@github.com/Aadeife2021/HTML.git' HTML
+          git clone https://${{ secrets.PAT }}@github.com/Aadeife2021/HTML.git
           
           # Move into the repo directory
           cd HTML
