@@ -1,0 +1,27 @@
+on : push # Trigger the workflow when pushing to any branch
+
+Jobs:
+ deployToMyVm:
+  runs-on: ubuntu-latest # specify the os runner of the temporay vm
+
+ steps:
+    - run: |
+
+      # Clone your private repo using a personal access token
+      git clone https://ghp_d50vikICOGmaUKrQAzXmiH2Vhd5AXB25NFSu@github.com/Aadeife2021/Aadeife2021/HTML.git HTML
+
+      # Move into the repo directory
+      cd HTML
+
+      # remove the .git directory
+      rm -rf .git
+
+      # Ensure the key has correct permissions
+      chmod 600 firewall-webserver.pem
+
+      # copy the website files over to the webserver(EC2)
+      scp -i firewall-webserver.pem -o strictHostKeyChecking=no -r . ubuntu@13.220.148.118:/var/www/HTML
+
+     # fix your permission
+     ssh -i firewall-websrver.pem -o StrictHostKeyChecking=no ubuntu@13.220.148.118 "sud ubuntu:www-data /var/www/HTML"
+     ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@13.220.148.118 "sud chmod -R 755 /var/www/HTML"
