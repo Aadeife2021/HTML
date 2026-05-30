@@ -1,4 +1,12 @@
-steps:
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deployToMyVm:
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy Code to EC2 Server
         run: |
           # Clone your private repo using a personal access token
