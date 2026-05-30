@@ -4,12 +4,11 @@ Jobs:
  deployToMyVm:
   runs-on: ubuntu-latest # specify the os runner of the temporay vm
 
- steps:
-    - run: |
-
-      # Clone your private repo using a personal access token
-      git clone 'https://${{ secrets.PAT }}@github.com/Aadeife2021/HTML.git' HTML
-
+steps:
+      - name: Deploy Code to EC2 Server
+        run: |
+          # Clone your private repo using a personal access token
+          git clone 'https://${{ secrets.PAT }}@github.com/Aadeife2021/HTML.git' HTML
       # Move into the repo directory
       cd HTML
 
