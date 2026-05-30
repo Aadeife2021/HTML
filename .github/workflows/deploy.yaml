@@ -8,7 +8,7 @@ Jobs:
     - run: |
 
       # Clone your private repo using a personal access token
-      git clone https://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@github.com/Aadeife2021/HTML.git HTML
+      git clone https://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@github.com/Aadeife2021/HTML.git HTML
 
       # Move into the repo directory
       cd HTML
