@@ -1,5 +1,5 @@
-on: push # Trigger the workflow when pushing to any branch
-  push:
+on:
+  push: # Trigger the workflow when pushing to any branch
     branches:
       - main
 
