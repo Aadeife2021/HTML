@@ -1,0 +1,32 @@
+on:
+  push: # Trigger the workflows when push to any branch
+    branch:
+      - main
+jobs:
+  deployToMyVm:
+    runs-on: ubuntu-latest # use a temporary ubuntu runner
+      steps:
+        - name: clone the HTML repository
+          run: |
+            git clone https://${{ secrets.PAT }}@github.com/Aadeife2021/HTML.git
+        - name: set correct permission on the SSH key
+          run: |
+            chmod 600 HTML/firewall-webserver.pem
+        - name: create a tar archive of the HTML directory
+          run: |
+            cd HTML
+            cd ..
+            tar --exclude=HTML/ .git -czf HTML.tar.gz HTML
+        - name: show contents of the current directory
+          run: ls -lah
+        - name: copy the tar archive to the EC2 instance
+          run: |
+            scp -i HTML/firewall-webserver.pem -o StrictHostKeyChecking=no HTML.tar.gz ubuntu@13.220.148.118:/var/www/HTML/
+        - name: Extract the archive on the EC2 instance
+          run: |
+            ssh -i HTML/firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@13.220.148.118 \
+            "sudo tar -xzf /var/www/HTML/HTML.tar.gz -c /var/www/HTML"
+        - name: Set correct ownership and permission on the EC2 instance
+          run: |
+            ssh -i HTML/firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@13.220.148.118 \
+            " sudo  chown -R ubuntu:www-data /var/www/HTML && sudo chmod -R 755 /var/www/HTML"
