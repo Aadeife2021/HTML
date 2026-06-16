@@ -1,6 +1,6 @@
 on:
   push: # Trigger the workflows when push to any branch
-    branch:
+    branches:
       - main
 jobs:
   deployToMyVm:
