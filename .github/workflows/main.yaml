@@ -14,7 +14,7 @@ jobs:
           run: |
             chmod 600 HTML/firewall-webserver.pem
         - name: create a tar archive of the HTML directory
-          run: tar --exclude='.git' -czf HTML.tar.gz .
+          run: tar --exclude='.git' --exclude='HTML.tar.gz' -czf HTML.tar.gz .
         - name: show contents of the current directory
           run: ls -lah
         - name: copy the tar archive to the EC2 instance
