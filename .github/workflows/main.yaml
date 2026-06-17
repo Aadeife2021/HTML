@@ -1,11 +1,11 @@
 on:
-  push:
+  push: # Trigger the workflows when push to the branch
     branches:
       - main
 
 jobs:
   deployToMyVm:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # use a temporary ubuntu runner
     steps:
       - name: clone the HTML repository
         uses: actions/checkout@v4
@@ -14,7 +14,9 @@ jobs:
         run: chmod 600 firewall-webserver.pem
 
       - name: create a tar archive of the HTML directory
-        run: tar --exclude='.git' --exclude='HTML.tar.gz' -czf HTML.tar.gz .
+        run: run: |
+          tar --exclude='.git' -czf /tmp/HTML.tar.gz .
+          mv /tmp/HTML.tar.gz .
 
       - name: show contents of the current directory
         run: ls -lah
