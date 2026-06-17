@@ -2,10 +2,11 @@ on:
   push: # Trigger the workflows when push to any branch
     branches:
       - main
+
 jobs:
   deployToMyVm:
-    runs-on: ubuntu-latest # use a temporary ubuntu runner
-      steps:
+    runs-on: ubuntu-latest # Use a temporary ubtuntu runner
+    steps:
         - name: clone the HTML repository
           run: |
             git clone https://${{ secrets.PAT }}@github.com/Aadeife2021/HTML.git
