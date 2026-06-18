@@ -4,7 +4,7 @@ on:
       - main
 env: # Declar share environment varibales
   SERVER_IP: 13.220.148.118
-  DEPLOY_PATH: /var/wwww/HTML
+  DEPLOY_PATH: /var/www/HTML
 
 jobs:
   deployToMyVm:
@@ -29,8 +29,8 @@ jobs:
 
       - name: Extract the archive on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ ENV.SERVER_IP }} \
-          "sudo tar -xzf ${{ env.DEPLOY_PATH }}.tar.gz -C ${{ env.DEPLOY_PATH }}"
+          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }} \
+          "sudo tar -xzf ${{ env.DEPLOY_PATH }}HTML.tar.gz -C ${{ env.DEPLOY_PATH }}"
 
       - name: Set correct ownership and permission on the EC2 instance
         run: |
