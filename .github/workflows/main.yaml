@@ -4,7 +4,7 @@ on:
       - main
 env: # Declar share environment varibales
   SERVER_IP: 13.220.148.118
-  DEPLOY_PATH: /var/www/HTML
+  DEPLOY_PATH: /var/www/HTML/
 
 jobs:
   deployToMyVm:
