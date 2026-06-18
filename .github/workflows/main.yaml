@@ -25,14 +25,14 @@ jobs:
         run: ls -lah
 
       - name: copy the tar archive to the EC2 instance
-        run: scp -i firewall-webserver.pem -o StrictHostKeyChecking=no HTML.tar.gz ubuntu@13.220.148.118:/var/www/HTML/
+        run: scp -i firewall-webserver.pem -o StrictHostKeyChecking=no HTML.tar.gz ubuntu@SERVER_IP:/DEPLOY_PATH
 
       - name: Extract the archive on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@13.220.148.118 \
+          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@SERVER_IP \
           "sudo tar -xzf /var/www/HTML/HTML.tar.gz -C /var/www/HTML"
 
       - name: Set correct ownership and permission on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@13.220.148.118 \
+          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@SERVER_IP \
           "sudo chown -R ubuntu:www-data /var/www/HTML && sudo chmod -R 755 /var/www/HTML"
