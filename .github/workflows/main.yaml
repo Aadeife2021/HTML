@@ -2,6 +2,9 @@ on:
   push: # Trigger the workflows when push to the branch
     branches:
       - main
+env: # Declar share environment varibales
+  SERVER_IP: 13.220.148.118
+  DEPLOY_PATH: /var/wwww/HTML
 
 jobs:
   deployToMyVm:
