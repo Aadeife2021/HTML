@@ -1,22 +1,31 @@
-on:
-  push: # Trigger the workflows when push to the branch
-    branches:
-      - main
-env: # Declar share environment varibales
+name: Deploy HTML to EC2
+
+on: 
+  push:
+
+env:
   SERVER_IP: 3.235.160.151
-  DEPLOY_PATH: /var/www/HTML/
+  DEPLOY_PATH: /var/www/frontend
 
 jobs:
-  deployToMyVm:
-    runs-on: ubuntu-latest # use a temporary ubuntu runner
+  deployToMyvm:
+    runs-on: Ubtuntu-latest
+
     steps:
       - name: clone the HTML repository
-        uses: actions/checkout@v4
+        run: |
+          git clone https://${{ secrets.PAT }}@github.com/Aadeife2021/HTML.git
 
-      - name: set correct permission on the SSH key
-        run: chmod 600 firewall-webserver.pem
+      - name: Create PEM file from secret
+        run: |
+          mkdir -p frontend
+          echo "${{ secrets.PEM_KEY_CONTENT }}" > HTML/firewall-webserver.pem
 
-      - name: create a tar archive of the HTML directory
+      - name: set correct permissions on the SSH Key
+        run: |
+          chmod 600 HTML/firewall-webserver.pem
+
+      - name: Create a tar archive of the HTML directory
         run: |
           tar --exclude='.git' -czf /tmp/HTML.tar.gz .
           mv /tmp/HTML.tar.gz .
@@ -28,11 +37,11 @@ jobs:
         run: scp -i firewall-webserver.pem -o StrictHostKeyChecking=no HTML.tar.gz ubuntu@${{ env.SERVER_IP }}:${{ env.DEPLOY_PATH }}
 
       - name: Extract the archive on the EC2 instance
-        run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }} \
+        run: | 
+          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }} 
           "sudo tar -xzf ${{ env.DEPLOY_PATH }}HTML.tar.gz -C ${{ env.DEPLOY_PATH }}"
 
       - name: Set correct ownership and permission on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }} \
+          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }} 
           "sudo chown -R ubuntu:www-data ${{ env.DEPLOY_PATH }} && sudo chmod -R 755 ${{ env.DEPLOY_PATH }}"
