@@ -23,19 +23,20 @@ jobs:
       - name: Create a tar archive of the HTML directory
         run: |
           ls -lah
+          cd ..
           tar --exclude='.git' --exclude='firewall-webserver.pem' -czf HTML.tar.gz HTML
       - name: show contents of the current directory
         run: ls -lah
 
       - name: copy the tar archive to the EC2 instance
-        run: scp -i firewall-webserver.pem -o StrictHostKeyChecking=no HTML.tar.gz ubuntu@${{ env.SERVER_IP }}:${{ env.DEPLOY_PATH }}
+        run: scp -i HTML/firewall-webserver.pem -o StrictHostKeyChecking=no HTML/HTML.tar.gz ubuntu@${{ env.SERVER_IP }}:${{ env.DEPLOY_PATH }}
 
       - name: Extract the archive on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
+          ssh -i HTML/firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
           "sudo tar -xzf ${{ env.DEPLOY_PATH }}HTML.tar.gz -C ${{ env.DEPLOY_PATH }}"
       - name: Set correct ownership and permission on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
+          ssh -i HTML/firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
           "sudo chown -R ubuntu:www-data ${{ env.DEPLOY_PATH }} && sudo chmod -R 755 ${{ env.DEPLOY_PATH }}"
 
