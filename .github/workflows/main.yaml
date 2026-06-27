@@ -18,7 +18,7 @@ jobs:
 
       - name: Create PEM file from secret
         run: |
-          echo "${{ secrets.PEM_KEY_CONTENT }}" > firewall-webserver.pem
+          printf "%s" "${{ secrets.PEM_KEY_CONTENT }}" > firewall-webserver.pem
           chmod 600 firewall-webserver.pem
       - name: Create a tar archive of the HTML directory
         run: |
