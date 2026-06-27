@@ -24,7 +24,7 @@ jobs:
         run: |
           ls -lah
           cd ..
-          tar --exclude='.git' --exclude='firewall-webserver.pem' -czf HTML.tar.gz HTML
+          tar --exclude='.git' --exclude='firewall-webserver.pem' -czf HTML/HTML.tar.gz HTML
       - name: show contents of the current directory
         run: ls -lah
 
