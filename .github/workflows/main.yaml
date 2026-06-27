@@ -1,31 +1,26 @@
-name: Deploy HTML to EC2
 
 on:
-  push:
+  push: # Trigger the workflows when push to the branch
     branches:
       - main
-
-env:
+env: # Declar share environment varibales
   SERVER_IP: 3.235.160.151
-  DEPLOY_PATH: /var/www/html/
+  DEPLOY_PATH: /var/www/HTML/
 
 jobs:
-  deployToMyvm:
-    runs-on: ubuntu-latest
+  deployToMyVm:
+    runs-on: ubuntu-latest # use a temporary ubuntu runner
     steps:
       - name: clone the HTML repository
         uses: actions/checkout@v4
 
-      - name: Create PEM file from secret
-        run: |
-          echo "${{ secrets.PEM_KEY_CONTENT }}" | base64 -d > firewall-webserver.pem
-          chmod 600 firewall-webserver.pem
+      - name: set correct permission on the SSH key
+        run: chmod 600 firewall-webserver.pem
 
-      - name: Create a tar archive of the HTML directory
+      - name: create a tar archive of the HTML directory
         run: |
-          tar --exclude='.git' --exclude='firewall-webserver.pem' -czf /tmp/HTML.tar.gz .
+          tar --exclude='.git' -czf /tmp/HTML.tar.gz .
           mv /tmp/HTML.tar.gz .
-
       - name: show contents of the current directory
         run: ls -lah
 
@@ -34,11 +29,10 @@ jobs:
 
       - name: Extract the archive on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
-          "sudo mkdir -p ${{ env.DEPLOY_PATH }} && sudo tar -xzf ${{ env.DEPLOY_PATH }}HTML.tar.gz -C ${{ env.DEPLOY_PATH }}"
-
+          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }} \
+          "sudo tar -xzf ${{ env.DEPLOY_PATH }}HTML.tar.gz -C ${{ env.DEPLOY_PATH }}"
       - name: Set correct ownership and permission on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
+          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }} \
           "sudo chown -R ubuntu:www-data ${{ env.DEPLOY_PATH }} && sudo chmod -R 755 ${{ env.DEPLOY_PATH }}"
 
