@@ -17,10 +17,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create PEM file from secret
-        env:
-          RAW_SSH_KEY: ${{ secrets.PEM_KEY_CONTENT }}
         run: |
-          echo "$RAW_SSH_KEY" > firewall-webserver.pem
+          echo "${{ secrets.PEM_KEY_CONTENT }}" | base64 -d > firewall-webserver.pem
           chmod 600 firewall-webserver.pem
 
       - name: Create a tar archive of the HTML directory
