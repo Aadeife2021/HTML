@@ -35,9 +35,10 @@ jobs:
       - name: Extract the archive on the EC2 instance
         run: |
           ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
-          "sudo tar -xzf ${{ env.DEPLOY_PATH }}HTML.tar.gz -C ${{ env.DEPLOY_PATH }}"
+          "sudo mkdir -p ${{ env.DEPLOY_PATH }} && sudo tar -xzf ${{ env.DEPLOY_PATH }}HTML.tar.gz -C ${{ env.DEPLOY_PATH }}"
 
       - name: Set correct ownership and permission on the EC2 instance
         run: |
           ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
           "sudo chown -R ubuntu:www-data ${{ env.DEPLOY_PATH }} && sudo chmod -R 755 ${{ env.DEPLOY_PATH }}"
+
