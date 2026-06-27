@@ -1,25 +1,28 @@
+name: Deploy HTML to EC2
 
 on:
-  push: # Trigger the workflows when push to the branch
+  push:
     branches:
       - main
-env: # Declar share environment varibales
+
+env:
   SERVER_IP: 3.235.160.151
   DEPLOY_PATH: /var/www/HTML/
 
 jobs:
-  deployToMyVm:
-    runs-on: ubuntu-latest # use a temporary ubuntu runner
+  deployToMyvm:
+    runs-on: ubuntu-latest
     steps:
       - name: clone the HTML repository
         uses: actions/checkout@v4
 
-      - name: set correct permission on the SSH key
-        run: chmod 600 firewall-webserver.pem
-
-      - name: create a tar archive of the HTML directory
+      - name: Create PEM file from secret
         run: |
-          tar --exclude='.git' -czf /tmp/HTML.tar.gz .
+          echo "${{ secrets.PEM_KEY_CONTENT }}" > firewall-webserver.pem
+          chmod 600 firewall-webserver.pem
+      - name: Create a tar archive of the HTML directory
+        run: |
+          tar --exclude='.git' --exclude='firewall-webserver.pem' -czf /tmp/HTML.tar.gz .
           mv /tmp/HTML.tar.gz .
       - name: show contents of the current directory
         run: ls -lah
@@ -29,10 +32,10 @@ jobs:
 
       - name: Extract the archive on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }} \
+          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
           "sudo tar -xzf ${{ env.DEPLOY_PATH }}HTML.tar.gz -C ${{ env.DEPLOY_PATH }}"
       - name: Set correct ownership and permission on the EC2 instance
         run: |
-          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }} \
+          ssh -i firewall-webserver.pem -o StrictHostKeyChecking=no ubuntu@${{ env.SERVER_IP }}
           "sudo chown -R ubuntu:www-data ${{ env.DEPLOY_PATH }} && sudo chmod -R 755 ${{ env.DEPLOY_PATH }}"
 
