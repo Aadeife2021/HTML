@@ -24,12 +24,12 @@ jobs:
         run: |
           ls -lah
           cd ..
-          tar --exclude='.git' --exclude='firewall-webserver.pem' -czf HTML/HTML.tar.gz HTML
+          tar --exclude='.git' --exclude='firewall-webserver.pem' -czf HTML.tar.gz HTML
       - name: show contents of the current directory
         run: ls -lah
 
       - name: copy the tar archive to the EC2 instance
-        run: scp -i HTML/firewall-webserver.pem -o StrictHostKeyChecking=no HTML/HTML.tar.gz ubuntu@${{ env.SERVER_IP }}:${{ env.DEPLOY_PATH }}
+        run: scp -i HTML/firewall-webserver.pem -o StrictHostKeyChecking=no HTML.tar.gz ubuntu@${{ env.SERVER_IP }}:${{ env.DEPLOY_PATH }}
 
       - name: Extract the archive on the EC2 instance
         run: |
