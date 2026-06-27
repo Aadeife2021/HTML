@@ -22,7 +22,7 @@ jobs:
           chmod 600 firewall-webserver.pem
       - name: Create a tar archive of the HTML directory
         run: |
-          tar --exclude='.git' --exclude='firewall-webserver.pem' -czf HTML.tar.gz .
+          tar --exclude='.git' --exclude='firewall-webserver.pem' -czf HTML.tar.gz ../HTML
       - name: show contents of the current directory
         run: ls -lah
 
