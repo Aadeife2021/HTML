@@ -23,7 +23,7 @@ jobs:
 
       - name: Create a tar archive of the HTML directory
         run: |
-          tar --exclude='.git' --exclude='firewall-webserver.pem' -czf HTML.tar.gz .
+          tar --exclude='.git' --exclude='firewall-webserver.pem' --exclude='HTML.tar.gz' -czf HTML.tar.gz .
 
       - name: copy the tar archive to the EC2 instance home directory
         run: scp -i firewall-webserver.pem -o StrictHostKeyChecking=no HTML.tar.gz ubuntu@${{ env.SERVER_IP }}:/home/ubuntu/
