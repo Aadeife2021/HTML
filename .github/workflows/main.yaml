@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  SERVER_IP: 13.220.148.118
+  SERVER_IP: 3.235.160.151
   DEPLOY_PATH: /var/www/html
 
 jobs:
